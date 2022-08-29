@@ -4,14 +4,15 @@ const playerTwo = document.querySelector(".player--2");
 const activePlayer = document.querySelector(".player--active");
 let currentOne = document.getElementById("current--1");
 let currentTwo = document.getElementById("current--2");
-let currentPlayer = ""
+let currentPlayer = "";
 let scoreOne = document.getElementById("score--1");
 let scoreTwo = document.getElementById("score--2");
 const dice = document.querySelector(".dice");
 const newBtn = document.querySelector(".btn--new");
 const rollBtn = document.querySelector(".btn--roll");
 const holdBtn = document.querySelector(".btn--hold");
-let diceRoll = ""
+let diceRoll = "";
+
 
 function newGame(){
     playerOne.classList.add("player--active");
@@ -23,36 +24,76 @@ function newGame(){
     console.log(scoreOne)
 }
 
-function updateCurrent(){
-if (currentPlayer = 1 && diceRoll > 1){
-    currentOne.innerText = diceRoll + Number(currentOne.innerText)
-} else if(currentPlayer = 1 && diceRoll == 1){
+function updateCurrentOne(){
+        if(diceRoll > 1){
+            currentOne.innerText = Number(currentOne.innerText) + diceRoll
+        } else {
+            currentOne.innerText = 0
+            switchPlayer()
+        }
+    }
+
+function updateScoreOne(){
+    scoreOne.innerText = Number(scoreOne.innerText) + Number(currentOne.innerText)
     currentOne.innerText = 0
+
+    //Not yet working - set winning score 
+    if(scoreOne >= 20){
+        console.log("Player one wins")
+    }
 }
-else if (currentPlayer = 2 && diceRoll > 1){
-    currentTwo.innerText = diceRoll + Number(currentTwo.innerText)
-} else if(currentPlayer = 2 && diceRoll == 1)
+
+function updateCurrentTwo(){
+        if(diceRoll > 1){
+            currentTwo.innerText = Number(currentTwo.innerText) + diceRoll
+        } else {
+            currentTwo.innerText = 0
+            switchPlayer()
+        }
+    }
+
+function updateScoreTwo(){
+    scoreTwo.innerText = Number(scoreTwo.innerText) + Number(currentTwo.innerText)
     currentTwo.innerText = 0
+    if(scoreTwo >= 20){
+        console.log("Player one wins")
+    }
+}
+
+function switchPlayer(){
+    if(playerOne.classList.contains("player--active")){
+        playerOne.classList.remove("player--active")
+        playerTwo.classList.add("player--active")
+    } else{  
+        playerTwo.classList.remove("player--active")
+        playerOne.classList.add("player--active")
+    }
+}
+
+function hold(){
+    if(playerOne.classList.contains("player--active")){
+        updateScoreOne()
+        switchPlayer()
+        }
+        else{
+        updateScoreTwo()
+        switchPlayer()
+        }
 }
 
 newBtn.addEventListener('click', newGame);
 
 rollBtn.addEventListener('click', function(){
-    console.log(currentPlayer)
  diceRoll = Math.floor(Math.random() * 6) + 1;
  dice.src = `dice-${diceRoll}.png`;
- updateCurrent()
-
+ if(playerOne.classList.contains("player--active")){
+ updateCurrentOne()
+ }
+ else{
+ updateCurrentTwo()
+ }
 })
 
 
-holdBtn.addEventListener('click', function(){
-    if(playerOne.classList.contains("player--active")){
-        playerOne.classList.remove("player--active")
-        playerTwo.classList.add("player--active")
-        currentPlayer = 2
-    } else{  
-        playerTwo.classList.remove("player--active")
-        playerOne.classList.add("player--active")}
-        currentPlayer = 1
-})
+holdBtn.addEventListener('click', hold)
+
