@@ -24,6 +24,7 @@ function newGame(){
     console.log(scoreOne)
 }
 
+
 function updateCurrentOne(){
         if(diceRoll > 1){
             currentOne.innerText = Number(currentOne.innerText) + diceRoll
@@ -36,9 +37,7 @@ function updateCurrentOne(){
 function updateScoreOne(){
     scoreOne.innerText = Number(scoreOne.innerText) + Number(currentOne.innerText)
     currentOne.innerText = 0
-
-    //Not yet working - set winning score 
-    if(scoreOne >= 20){
+    if(Number(scoreOne.innerText) >= 20){
         console.log("Player one wins")
     }
 }
@@ -55,8 +54,8 @@ function updateCurrentTwo(){
 function updateScoreTwo(){
     scoreTwo.innerText = Number(scoreTwo.innerText) + Number(currentTwo.innerText)
     currentTwo.innerText = 0
-    if(scoreTwo >= 20){
-        console.log("Player one wins")
+    if(Number(scoreTwo.innerText) >= 20){
+        console.log("Player two wins")
     }
 }
 
