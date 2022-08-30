@@ -1,10 +1,9 @@
 'use strict';
 const playerOne  = document.querySelector(".player--1");
 const playerTwo = document.querySelector(".player--2");
-const activePlayer = document.querySelector(".player--active");
+let activePlayer = 1
 let currentOne = document.getElementById("current--1");
 let currentTwo = document.getElementById("current--2");
-let currentPlayer = "";
 let scoreOne = document.getElementById("score--1");
 let scoreTwo = document.getElementById("score--2");
 const dice = document.querySelector(".dice");
@@ -12,6 +11,7 @@ const newBtn = document.querySelector(".btn--new");
 const rollBtn = document.querySelector(".btn--roll");
 const holdBtn = document.querySelector(".btn--hold");
 let diceRoll = "";
+let playing = true
 
 
 function newGame(){
@@ -21,78 +21,64 @@ function newGame(){
     currentTwo.innerText = 0;
     scoreOne.innerText = 0
     scoreTwo.innerText = 0
-    console.log(scoreOne)
+    playerOne.classList.remove("player--winner");
+    playerTwo.classList.remove("player--winner");
+    dice.classList.add("hidden")
+    playing = true
 }
 
 
-function updateCurrentOne(){
+//Update current score of player
+function updateCurrent(){
+    let currentScore = document.getElementById(`current--${activePlayer}`)
         if(diceRoll > 1){
-            currentOne.innerText = Number(currentOne.innerText) + diceRoll
+            currentScore.innerText = Number(currentScore.innerText) + diceRoll
+            console.log(currentScore)
         } else {
-            currentOne.innerText = 0
+            currentScore.innerText = 0
             switchPlayer()
         }
     }
 
-function updateScoreOne(){
-    scoreOne.innerText = Number(scoreOne.innerText) + Number(currentOne.innerText)
-    currentOne.innerText = 0
-    if(Number(scoreOne.innerText) >= 20){
-        console.log("Player one wins")
-    }
-}
-
-function updateCurrentTwo(){
-        if(diceRoll > 1){
-            currentTwo.innerText = Number(currentTwo.innerText) + diceRoll
-        } else {
-            currentTwo.innerText = 0
-            switchPlayer()
-        }
-    }
-
-function updateScoreTwo(){
-    scoreTwo.innerText = Number(scoreTwo.innerText) + Number(currentTwo.innerText)
-    currentTwo.innerText = 0
-    if(Number(scoreTwo.innerText) >= 20){
-        console.log("Player two wins")
+ //Update score of player at hold
+function updateScore(){
+    let currentScore = document.getElementById(`current--${activePlayer}`)
+    let score = document.getElementById(`score--${activePlayer}`)
+    let player = document.querySelector(`.player--${activePlayer}`)
+    score.innerText = Number(score.innerText) + Number(currentScore.innerText)
+    currentScore.innerText = 0
+    if(Number(score.innerText) >= 20){
+        player.classList.add("player--winner");
+        player.classList.remove("player--active")
+        playing = false
+        dice.classList.add("hidden");
     }
 }
 
 function switchPlayer(){
-    if(playerOne.classList.contains("player--active")){
-        playerOne.classList.remove("player--active")
-        playerTwo.classList.add("player--active")
-    } else{  
-        playerTwo.classList.remove("player--active")
-        playerOne.classList.add("player--active")
-    }
+    playerOne.classList.toggle("player--active")
+    playerTwo.classList.toggle("player--active")
+    activePlayer = activePlayer === 1 ? 2 : 1;
+    console.log(activePlayer)
 }
 
 function hold(){
-    if(playerOne.classList.contains("player--active")){
-        updateScoreOne()
-        switchPlayer()
-        }
-        else{
-        updateScoreTwo()
-        switchPlayer()
-        }
+    if(playing){
+   updateScore()
+   switchPlayer()
+    }
 }
 
 newBtn.addEventListener('click', newGame);
+holdBtn.addEventListener('click', hold)
 
+// Roll the dice
 rollBtn.addEventListener('click', function(){
+    if(playing){
  diceRoll = Math.floor(Math.random() * 6) + 1;
  dice.src = `dice-${diceRoll}.png`;
- if(playerOne.classList.contains("player--active")){
- updateCurrentOne()
- }
- else{
- updateCurrentTwo()
- }
+ dice.classList.remove("hidden");
+ updateCurrent()
+    }
 })
-
-
-holdBtn.addEventListener('click', hold)
 
