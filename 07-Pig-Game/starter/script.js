@@ -1,15 +1,15 @@
 'use strict';
 const playerOne  = document.querySelector(".player--1");
 const playerTwo = document.querySelector(".player--2");
+const dice = document.querySelector(".dice");
+const newBtn = document.querySelector(".btn--new");
+const rollBtn = document.querySelector(".btn--roll");
+const holdBtn = document.querySelector(".btn--hold");
 let activePlayer = 1
 let currentOne = document.getElementById("current--1");
 let currentTwo = document.getElementById("current--2");
 let scoreOne = document.getElementById("score--1");
 let scoreTwo = document.getElementById("score--2");
-const dice = document.querySelector(".dice");
-const newBtn = document.querySelector(".btn--new");
-const rollBtn = document.querySelector(".btn--roll");
-const holdBtn = document.querySelector(".btn--hold");
 let diceRoll = "";
 let playing = true
 
@@ -73,7 +73,7 @@ newBtn.addEventListener('click', newGame);
 holdBtn.addEventListener('click', hold)
 
 // Roll the dice
-rollBtn.addEventListener('click', function(){
+rollBtn.addEventListener('click', () =>{
     if(playing){
  diceRoll = Math.floor(Math.random() * 6) + 1;
  dice.src = `dice-${diceRoll}.png`;
